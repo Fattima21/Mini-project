@@ -1,0 +1,35 @@
+#include <iostream>
+using namespace std;
+
+void threeSearch(int arr[], int size, int element)
+{
+    int first = element, second = element, third = element;
+    for (int i = 0; i < size; i++)
+    {
+        if (arr[i] > first)
+        {
+            third = second;
+            second = first;
+            first = arr[i];
+        }
+        else if (arr[i] > second && arr[i] != first)
+        {
+            third = second;
+            second = arr[i];
+        }
+        else if (arr[i] > third && arr[i] != second && arr[i] != first)
+        {
+            third = arr[i];
+        }
+    }
+
+    cout << "Three largest elements " << first << " " << second << " " << third;
+}
+
+int main()
+{
+    int array[] = {1, 23, 16, 82, 70};
+    int size = 5;
+    threeSearch(array, size, array[0]);
+    return 0;
+}

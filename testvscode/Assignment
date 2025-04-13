@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_SIZE = 5;
+
+string stack[5];
+string redoStack[5];
+int top = -1, redoTop = -1;
+
+void add(const string& val) {
+    if (top == MAX_SIZE - 1) {
+        // Circular replacement if the stack is full
+        for (int i = 0; i < MAX_SIZE - 1; i++) {
+            stack[i] = stack[i + 1];
+        }
+        stack[top] = val;
+    }
+    else {
+        top++;
+        stack[top] = val;
+        redoTop = -1; // Clear redo stack after a new entry
+    }
+}
+
+void undo() {
+    if (top <= -1)
+        cout << "Stack Underflow" << endl;
+    else {
+        cout << stack[top] << endl;
+        redoStack[++redoTop] = stack[top--];
+    }
+}
+
+void redo() {
+    if (redoTop >= 0) {
+        add(redoStack[redoTop]);
+        redoTop--;
+    }
+    else {
+        cout << "Nothing to redo." << endl;
+    }
+}
+
+void display() {
+    if (top >= 0) {
+        for (int i = 0; i <= top; i++)
+            cout << stack[i] << " ";
+        cout << endl;
+    }
+    else
+        cout << "Stack is empty" << endl;
+}
+
+int main() {
+    int choice;
+    string val;
+
+    do {
+        cout << "*******************************************" << endl;
+        cout << "enter the stack operation you want to make:" << endl;
+        cout << "1- Add some text" << endl;
+        cout << "2- Undo text entry" << endl;
+        cout << "3- Redo text entry" << endl;
+        cout << "4- Display text" << endl;
+        cout << "5- Exit" << endl;
+
+        cin >> choice;
+        cout << "*******************************************" << endl;
+
+        switch (choice) {
+        case 1: {
+            cout << "Enter the text you want to add: ";
+            cin >> val;
+            add(val);
+            break;
+        }
+        case 2: {
+            undo();
+            break;
+        }
+        case 3: {
+            redo();
+            break;
+        }
+        case 4: {
+            display();
+            break;
+        }
+        case 5: {
+            cout << "Exit" << endl;
+            break;
+        }
+        default: {
+            cout << "Invalid Choice" << endl;
+        }
+        }
+    } while (choice != 5);
+
+    return 0;
+}
